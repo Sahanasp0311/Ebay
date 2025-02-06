@@ -1,0 +1,39 @@
+UI Automation
+On ebay.com website 
+
+package selenium.Selenium;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Ebay {
+    public static void main(String[] args) {
+       
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            driver.get("https://www.ebay.com");
+            WebElement searchBox = driver.findElement(By.id("gh-ac"));
+            searchBox.sendKeys("book");
+            searchBox.sendKeys(Keys.RETURN);
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            WebElement firstBook = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".s-item__link")));
+            firstBook.click();
+            WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("atcRedesignId_btn")));
+            addToCartButton.click();
+            WebElement cartCountElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#gh-cart-n")));
+            String cartCount = cartCountElement.getText();
+            System.out.println("Number of items in the cart: " + cartCount);
+
+        } finally {
+          
+            driver.quit();
+        }
+    }
+}
